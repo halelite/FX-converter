@@ -19,10 +19,16 @@ import {
 import { ArrowDownFilled } from "@/assets/icons/arrow-down-filled";
 import { InputGroupAddon } from "@/components/ui/input-group";
 import { SearchOutlined } from "@/assets/icons/search-outlined";
+import { NumberInput } from "@/components/ui/customNumberInput";
+import { useState } from "react";
+import { Toggle } from "@/components/ui/toggle";
+import { cn } from "@/lib/utils";
 
 const testNum = 1000;
 
 const CurrencyConverter = () => {
+  const [pressed, setPressed] = useState(false);
+
   const comboItems = [
     {
       value: "Americas",
@@ -56,8 +62,12 @@ const CurrencyConverter = () => {
           <div className="flex-1 bg-neutral-600 border border-neutral-500 p-4 rounded-lg">
             <div className="text-bodySm mb-5">SEND</div>
 
-            <div className="flex items-center justify-between">
-              <div className="text-h1">{testNum.toLocaleString()}</div>
+            <div className="flex items-center justify-between gap-2">
+              <NumberInput
+                value={testNum}
+                onValueChange={(val) => console.log("number output 1 >>", val)}
+                className="text-h1!"
+              />
 
               <Combobox items={comboItems}>
                 <ComboboxTrigger
@@ -115,9 +125,57 @@ const CurrencyConverter = () => {
             <div className="text-bodySm mb-5">RECEIVE</div>
 
             <div className="flex items-center justify-between">
-              <div className="text-h1 text-lime-500">
-                {(853.02).toLocaleString()}
-              </div>
+              <NumberInput
+                value={853.02}
+                onValueChange={(val) => console.log("number output 2 >>", val)}
+                className="text-h1! text-lime-500"
+              />
+
+              <Combobox items={comboItems}>
+                <ComboboxTrigger
+                  render={
+                    <Button
+                      variant="outline"
+                      className="justify-between text-bodySm! p-2.5! bg-neutral-500!"
+                    >
+                      <ComboboxValue placeholder="select a currency" />
+                      <ArrowDownFilled className="size-3!" />
+                    </Button>
+                  }
+                />
+                <ComboboxContent className="p-1">
+                  <ComboboxInput
+                    showTrigger={false}
+                    placeholder="Search currencies..."
+                    className="focus-within:ring-0!"
+                  >
+                    <InputGroupAddon className="me-1.25!">
+                      <SearchOutlined className="text-white/80! h-5!" />
+                    </InputGroupAddon>
+                  </ComboboxInput>
+                  <ComboboxList>
+                    {(group) => (
+                      <ComboboxGroup key={group.value} items={group.items}>
+                        <ComboboxLabel className="flex items-center justify-between border-b mb-1! py-2! text-captionMd! uppercase">
+                          <span>{group.value}</span>
+                          <span>3</span>
+                        </ComboboxLabel>
+                        <ComboboxCollection>
+                          {(item) => (
+                            <ComboboxItem
+                              key={item}
+                              value={item}
+                              className="px-2! py-3! text-bodySm!"
+                            >
+                              {item}
+                            </ComboboxItem>
+                          )}
+                        </ComboboxCollection>
+                      </ComboboxGroup>
+                    )}
+                  </ComboboxList>
+                </ComboboxContent>
+              </Combobox>
             </div>
           </div>
         </div>
@@ -126,10 +184,19 @@ const CurrencyConverter = () => {
           <div className="text-captionMd">1 USD = 0.8530 EUR</div>
 
           <div className="flex items-center gap-3">
-            <Button variant="outline" className="uppercase">
-              <StarFilled />
-              Favorite/Favorited
-            </Button>
+            <Toggle
+              aria-label="Toggle favorite"
+              variant="outline"
+              pressed={pressed}
+              onPressedChange={setPressed}
+              className="uppercase"
+            >
+              <StarFilled
+                pressed={pressed}
+                className={cn("text-neutral-200", { "text-lime-500": pressed })}
+              />
+              {pressed ? "Favorited" : "Favorite"}
+            </Toggle>
 
             <Button variant="outline" className="uppercase bg-transparent!">
               Log conversion
