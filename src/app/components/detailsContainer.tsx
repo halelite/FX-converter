@@ -1,12 +1,12 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Content } from "next/font/google";
+import History from "./history";
 
 const DetailsContainer = () => {
   const tabItems = [
     {
       value: "history",
       title: "HISTORY",
-      content: <div>HISTORY CONTENT</div>,
+      content: <History />,
     },
     {
       value: "compare",
