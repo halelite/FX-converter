@@ -2,56 +2,83 @@
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RateAreaChart from "./rateChart";
+import { useEffect, useState } from "react";
+import { getPairRatesByRange, RangeKey } from "@/lib/helpers";
+import { Rate } from "../(root)/types";
+import ConversionStats from "./conversionStats";
 
-const History = () => {
-  const statsItems = [
-    {
-      title: "Open",
-      value: 0.8516,
-    },
-    {
-      title: "Last",
-      value: 0.853,
-    },
-    {
-      title: "CHANGE",
-      value: 0.8516,
-    },
-    {
-      title: "% CHANGE",
-      value: +0.0014,
-    },
-  ];
+type HistoryProps = {
+  baseCurrency: string;
+  toCurrency: string;
+};
+
+const History = ({ baseCurrency, toCurrency }: HistoryProps) => {
+  const [selectedRange, setSelectedRange] = useState<RangeKey>("1M");
+  const [rates, setRates] = useState<Rate[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRates = async () => {
+      setLoading(true);
+
+      try {
+        const data = await getPairRatesByRange(
+          selectedRange,
+          baseCurrency,
+          toCurrency,
+        );
+
+        setRates(data);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRates();
+  }, [selectedRange, baseCurrency, toCurrency]);
 
   return (
-    <div>
-      <div className="flex items-center justify-between gap-4 flex-wrap mb-5">
-        <div className="w-full grid grid-cols-2 sm:w-auto sm:grid-cols-4 gap-4 shrink-0">
-          {statsItems.map((item, i) => (
-            <div
-              key={`${item.title}-${i}`}
-              className="bg-card border border-neutral-600 px-5 py-3 rounded-2xl sm:w-35"
-            >
-              <div className="text-bodySm opacity-70 mb-4">{item.title}</div>
-              <div className="text-h3">{item.value}</div>
-            </div>
-          ))}
+    <>
+      {!loading && rates.length === 0 ? (
+        <div className="flex flex-col items-center justify-center gap-4 py-10">
+          <div className="text-h3 text-neutral-100">
+            No chart data available
+          </div>
+          <div className="w-5/6 text-neutral-200 text-bodySm text-center lg:w-2/4">
+            We couldn't load rate history for {baseCurrency}/{toCurrency} right
+            now. This usually clears up in a minute.
+          </div>
         </div>
+      ) : (
+        <>
+          <div className="flex items-center justify-between gap-4 flex-wrap mb-5">
+            <ConversionStats rates={rates} loading={loading} />
 
-        <Tabs>
-          <TabsList>
-            <TabsTrigger value="1D">1D</TabsTrigger>
-            <TabsTrigger value="1W">1W</TabsTrigger>
-            <TabsTrigger value="1M">1M</TabsTrigger>
-            <TabsTrigger value="3M">3M</TabsTrigger>
-            <TabsTrigger value="1Y">1Y</TabsTrigger>
-            <TabsTrigger value="5Y">5Y</TabsTrigger>
-          </TabsList>
-        </Tabs>
-      </div>
+            <Tabs
+              value={selectedRange}
+              onValueChange={(v) => setSelectedRange(v as RangeKey)}
+            >
+              <TabsList>
+                <TabsTrigger value="1D">1D</TabsTrigger>
+                <TabsTrigger value="1W">1W</TabsTrigger>
+                <TabsTrigger value="1M">1M</TabsTrigger>
+                <TabsTrigger value="3M">3M</TabsTrigger>
+                <TabsTrigger value="1Y">1Y</TabsTrigger>
+                <TabsTrigger value="5Y">5Y</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
 
-      <RateAreaChart />
-    </div>
+          <RateAreaChart
+            rates={rates}
+            timeRange={selectedRange}
+            baseCurrency={baseCurrency}
+            toCurrency={toCurrency}
+            loading={loading}
+          />
+        </>
+      )}
+    </>
   );
 };
 

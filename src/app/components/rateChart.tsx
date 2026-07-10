@@ -2,104 +2,143 @@
 
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-import { TrendingUp } from "lucide-react";
-export const description = "A linear area chart";
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-];
+import { Rate } from "../(root)/types";
+import { format } from "date-fns";
+import {
+  formatChartDate,
+  formatRate,
+  getEvenlySpacedTicks,
+  getOpenLastData,
+  RangeKey,
+} from "@/lib/helpers";
+import { Skeleton } from "@/components/ui/skeleton";
+
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  rate: {
+    label: "Rate",
     color: "var(--chart-1)",
   },
 } satisfies ChartConfig;
 
-const RateAreaChart = () => {
+const tickCount = {
+  "1D": 3,
+  "1W": 8,
+  "1M": 5,
+  "3M": 10,
+  "1Y": 12,
+  "5Y": 5,
+};
+
+type ChartProps = {
+  rates: Rate[];
+  timeRange: RangeKey;
+  baseCurrency: string;
+  toCurrency: string;
+  loading: boolean;
+};
+
+const RateAreaChart = ({
+  rates,
+  timeRange,
+  baseCurrency,
+  toCurrency,
+  loading,
+}: ChartProps) => {
+  const last = loading ? 0 : getOpenLastData(rates)?.last;
+  const latestRate = rates.at(-1);
+  console.log("chart rates", rates);
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Area Chart - Linear</CardTitle>
-        <CardDescription>
-          Showing total visitors for the last 6 months
-        </CardDescription>
+        <CardTitle className="flex items-center justify-between">
+          <div className="text-body">{`${baseCurrency}/${toCurrency}`}</div>
+          <div className="text-captionMd text-white/70">
+            {/* {last ? last : 0} · MAY 14 16:00 CET */}
+            {last ? (
+              formatRate(last)
+            ) : (
+              <Skeleton className="h-3.75 w-12.5 rounded-full" />
+            )}{" "}
+            ·{" "}
+            {latestRate ? (
+              `${format(new Date(latestRate.date), "MMM d")} 16:00 CET`
+            ) : (
+              <Skeleton className="h-3.75 w-22.5 rounded-full" />
+            )}
+          </div>
+        </CardTitle>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="max-h-72 w-full">
-          <AreaChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              left: -20,
-              //   right: 12,
-            }}
-          >
-            <defs>
-              <linearGradient id="desktopGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#cef739" stopOpacity={0.8} />
-                <stop offset="100%" stopColor="#171719" stopOpacity={0.1} />
-              </linearGradient>
-            </defs>
+        {loading ? (
+          <Skeleton className="max-h-72 w-full h-72 rounded-md" />
+        ) : (
+          <ChartContainer config={chartConfig} className="max-h-72 w-full">
+            <AreaChart
+              accessibilityLayer
+              data={rates}
+              margin={{
+                left: -14,
+              }}
+            >
+              <defs>
+                <linearGradient id="rateGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#cef739" stopOpacity={0.8} />
+                  <stop offset="100%" stopColor="#171719" stopOpacity={0.1} />
+                </linearGradient>
+              </defs>
 
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
-            <YAxis
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              tickCount={3}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="dot" hideLabel />}
-            />
-            <Area
-              dataKey="desktop"
-              type="linear"
-              fill="url(#desktopGradient)"
-              fillOpacity={0.4}
-              stroke="var(--color-lime-500)"
-              strokeWidth={2}
-            />
-          </AreaChart>
-        </ChartContainer>
+              <CartesianGrid
+                vertical={false}
+                strokeDasharray="3 3"
+                stroke="#2e2e2e"
+              />
+              <XAxis
+                dataKey="date"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                ticks={getEvenlySpacedTicks(rates, tickCount[timeRange])}
+                tickFormatter={(value) => formatChartDate(timeRange, value)}
+                stroke="#9d9d9d"
+              />
+              <YAxis
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                tickCount={3}
+                // width={60}
+                tickFormatter={(value) =>
+                  new Intl.NumberFormat("en", {
+                    notation: "compact",
+                    maximumFractionDigits: 2,
+                  }).format(value)
+                }
+                stroke="#9d9d9d"
+              />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent indicator="dot" />}
+              />
+              <Area
+                dataKey="rate"
+                type="linear"
+                fill="url(#rateGradient)"
+                fillOpacity={0.4}
+                stroke="var(--color-lime-500)"
+                strokeWidth={2}
+              />
+            </AreaChart>
+          </ChartContainer>
+        )}
       </CardContent>
-      <CardFooter>
-        <div className="flex w-full items-start gap-2 text-sm">
-          <div className="grid gap-2">
-            <div className="flex items-center gap-2 leading-none font-medium">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-            </div>
-            <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              January - June 2024
-            </div>
-          </div>
-        </div>
-      </CardFooter>
     </Card>
   );
 };
