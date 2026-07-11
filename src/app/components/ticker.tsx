@@ -1,43 +1,53 @@
 "use client";
 
-import { motion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { formatRate } from "@/lib/helpers";
+import { motion, useAnimate } from "motion/react";
+import { useLayoutEffect, useRef, useState } from "react";
 
 export const Ticker = ({ items }: any) => {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [width, setWidth] = useState(0);
+  const [scope, animate] = useAnimate();
 
   const tickerItems = [...items, ...items];
 
-  useEffect(() => {
-    if (trackRef.current) {
-      setWidth(trackRef.current.scrollWidth / 2);
-    }
-  }, [items]);
+  useLayoutEffect(() => {
+    if (!scope.current) return;
 
-  return (
-    <motion.div
-      ref={trackRef}
-      className="flex w-max"
-      animate={{
-        // x: ["0%", "-50%"],
-        x: ["0%", -width],
-      }}
-      transition={{
+    const width = scope.current.scrollWidth / 2;
+
+    const controls = animate(
+      scope.current,
+      { x: [0, -width] },
+      {
         duration: 20,
         ease: "linear",
         repeat: Infinity,
-      }}
-    >
+      },
+    );
+
+    const element = scope.current;
+
+    const handleEnter = () => controls.pause();
+    const handleLeave = () => controls.play();
+
+    element.addEventListener("pointerenter", handleEnter);
+    element.addEventListener("pointerleave", handleLeave);
+
+    return () => {
+      element.removeEventListener("pointerenter", handleEnter);
+      element.removeEventListener("pointerleave", handleLeave);
+      controls.stop();
+    };
+  }, [items]);
+
+  return (
+    <motion.div ref={scope} className="flex w-max">
       {tickerItems.map((item, index) => (
         <div
           key={index}
           className="flex items-center gap-2.5 p-3 border-e border-neutral-500 whitespace-nowrap"
         >
           <div className="text-neutral-200 text-captionMd">{item.pair}</div>
-          <div className="text-caption">
-            {parseFloat(item?.rate?.toFixed(4))}
-          </div>
+          <div className="text-caption">{formatRate(item.rate, 4)}</div>
 
           <div
             className={`flex items-center gap-2 text-captionMd ${
@@ -51,7 +61,7 @@ export const Ticker = ({ items }: any) => {
             <div>
               {item?.direction === 1 ? "▲" : item?.direction === -1 ? "▼" : "-"}
             </div>
-            <div>{parseFloat(item?.percentChange?.toFixed(2))}%</div>
+            <div>{formatRate(item.percentChange, 2)}%</div>
           </div>
         </div>
       ))}
