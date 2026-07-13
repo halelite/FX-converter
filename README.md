@@ -86,12 +86,12 @@ Build a modern foreign exchange currency converter that allows users to convert 
 
 ### Built with
 
-- [Next.js (v16)](https://nextjs.org/) - React framework
-- [Tailwind CSS](https://tailwindcss.com/) - React framework
-- [Shadcn](https://ui.shadcn.com/) - React framework
-- [Motion](https://motion.dev/) - React framework
-- [date-fns](https://motion.dev/) - React framework
-- [decimal.js](https://mikemcl.github.io/decimal.js/) - React framework
+- [Next.js](https://nextjs.org/) - React framework for building full-stack web applications
+- [Tailwind CSS](https://tailwindcss.com/) - Static type checking for safer and more maintainable code
+- [Shadcn](https://ui.shadcn.com/) - Accessible, customizable UI components
+- [Motion](https://motion.dev/) - Animation library for smooth UI interactions and transitions
+- [date-fns](https://motion.dev/) - Modern utility library for date manipulation and formatting
+- [decimal.js](https://mikemcl.github.io/decimal.js/) - Arbitrary-precision decimal arithmetic for accurate currency calculations
 
 ### What I learned
 
@@ -99,7 +99,7 @@ Working on this project helped me gain a deeper understanding of:
 
 - Structuring helper functions by separating data fetching from data transformation.
 - Building reusable React components with clear responsibilities.
-- Managing asynchronous data fetching and loading states without React Query.
+- Managing asynchronous data fetching and loading states.
 - Working with historical exchange rate data and calculating rate changes over different time ranges.
 - Using URL search parameters to create clean and flexible API requests.
 - Improving accessibility through keyboard navigation and semantic UI components.
