@@ -18,7 +18,7 @@ export const Ticker = ({ items }: any) => {
       scope.current,
       { x: [0, -width] },
       {
-        duration: 20,
+        duration: 25,
         ease: "linear",
         repeat: Infinity,
       },
