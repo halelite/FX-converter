@@ -129,7 +129,8 @@
 
 /*========== RADIUS ==========*/
 @theme {
-  --radius-20: 1.25rem: /* 20px */;
+  --radius-10: 0.625rem; /* 10px */
+  --radius-20: 1.25rem; /* 20px */
 }
 
 /* @media (prefers-color-scheme: dark) {
