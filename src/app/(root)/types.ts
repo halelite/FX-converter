@@ -15,6 +15,29 @@ export interface Rate {
   rate: number;
 }
 
+export type CompareRate = Rate & {
+  to_country_code: string;
+  converted_amount: string;
+  to_name: string;
+};
+
+export type PairChangeData = {
+  pair: string;
+  rate: number;
+  date: string;
+  absoluteChange: number;
+  percentChange: number;
+  direction: -1 | 0 | 1;
+};
+
+export type Log = {
+  id: string;
+  time: Date;
+  pair: string;
+  sendAmount: string;
+  receiveAmount: string;
+};
+
 export type GroupedCurrency = Record<
   "popular" | "other currencies",
   Currency[]
