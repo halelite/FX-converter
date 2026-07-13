@@ -73,14 +73,42 @@ Build a modern foreign exchange currency converter that allows users to convert 
 - See hover and focus states for all interactive elements on the page
 - Navigate the entire app using only their keyboard
 
-### Screenshot
+<!-- ### Screenshot
 
-![Design preview for FX converter](./public/images/fx-converter-screenshot.jpeg)
+![Design preview for FX converter](./public/images/fx-converter-screenshot.jpeg) -->
 
 ### Links
 
 - Solution URL: [Solution URL](https://github.com/halelite/FX-converter.git)
 - Live Site URL: [Live site URL](https://fx-converter-ebon.vercel.app/)
+
+## Setup Project Locally
+
+Clone the repository:
+
+```bash
+git clone https://github.com/halelite/FX-converter.git
+```
+
+Navigate to the project directory:
+
+```bash
+cd FX-converter
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## My process
 
