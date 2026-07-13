@@ -203,8 +203,6 @@ const CurrencyConverter = ({
                 }}
                 containerRef={receiveRef}
               />
-
-              {/* <ComboboxWithGroupsAndSeparator /> */}
             </div>
           </div>
         </div>
