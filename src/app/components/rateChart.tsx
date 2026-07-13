@@ -16,6 +16,7 @@ import {
   formatRate,
   getEvenlySpacedTicks,
   getOpenLastData,
+  getPaddedDomain,
   RangeKey,
 } from "@/lib/helpers";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -109,6 +110,7 @@ const RateAreaChart = ({
                 stroke="#9d9d9d"
               />
               <YAxis
+                domain={getPaddedDomain(rates)}
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}

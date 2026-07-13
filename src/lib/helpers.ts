@@ -582,3 +582,16 @@ export const formatTimeDistance = (date: Date) => {
 
   return `${Math.max(minutes, 1)}M`;
 };
+
+// get the right domain for chart axes
+export const getPaddedDomain = (
+  rates: Rate[],
+  paddingRatio = 0.1,
+): [number, number] => {
+  const values = rates.map((r) => r.rate);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const range = max - min || max * 0.01; // avoid zero range if all values are equal
+  const padding = range * paddingRatio;
+  return [min - padding, max + padding];
+};
