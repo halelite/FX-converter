@@ -1,4 +1,9 @@
-import { getCurrencies, parseAmount, parsePair } from "@/lib/helpers";
+import {
+  getCurrencies,
+  getMultiCurrency,
+  parseAmount,
+  parsePair,
+} from "@/lib/helpers";
 import CurrencyConverter from "../components/converter";
 import DetailsContainer from "../components/detailsContainer";
 import { GroupedCurrency } from "./types";
@@ -35,6 +40,12 @@ export default async function Home({
     ),
   };
 
+  const multiCurrencyList = await getMultiCurrency({
+    amount: amount.toString(),
+    base: fromCurrency,
+    to: toCurrency,
+  });
+
   return (
     <div className="h-full flex flex-col gap-8 py-8 px-4 md:py-12 md:px-6 lg:px-8 -bg-zinc-50 -dark:bg-black">
       <CurrencyConverter
@@ -48,6 +59,7 @@ export default async function Home({
         baseCurrency={fromCurrency}
         toCurrency={toCurrency}
         amount={amount}
+        compareList={multiCurrencyList}
       />
     </div>
   );
