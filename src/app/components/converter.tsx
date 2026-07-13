@@ -71,7 +71,7 @@ const CurrencyConverter = ({
 
   // convert currencies on currency change
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
+    let timeout: ReturnType<typeof setTimeout>;
 
     const activeValue = direction === "send" ? sendValue : receiveValue;
 
@@ -166,8 +166,8 @@ const CurrencyConverter = ({
             </div>
           </div>
 
-          <div
-            className="self-center size-12 flex items-center justify-center bg-neutral-600 border hover:bg-neutral-500 border-neutral-500 focus-visible:ring focus-visible:ring-lime-500! rounded-lg shrink-0 cursor-pointer"
+          <Button
+            className="self-center size-12 bg-neutral-600! border hover:bg-neutral-500! border-neutral-500 focus-visible:ring focus-visible:ring-lime-500! rounded-lg shrink-0 text-foreground!"
             tabIndex={0}
             onClick={loading ? () => {} : handleSwapCurrencies}
           >
@@ -176,7 +176,7 @@ const CurrencyConverter = ({
             ) : (
               <ExchangeOutlined className="rotate-90 sm:rotate-0 -w-4! -h-4.5!" />
             )}
-          </div>
+          </Button>
 
           <div
             className="flex-1 min-w-0 bg-neutral-600 border border-neutral-500 p-4 rounded-lg"

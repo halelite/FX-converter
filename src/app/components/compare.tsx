@@ -15,7 +15,6 @@ type CompareProps = {
 
 const Compare = ({ baseCurrency, amount, compareList }: CompareProps) => {
   const { favorites, toggleFavorite } = useFavorites();
-  console.log("compareList", compareList);
 
   if (compareList?.length === 0) {
     return (
