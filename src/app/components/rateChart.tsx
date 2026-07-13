@@ -53,25 +53,24 @@ const RateAreaChart = ({
 }: ChartProps) => {
   const last = loading ? 0 : getOpenLastData(rates)?.last;
   const latestRate = rates.at(-1);
-  console.log("chart rates", rates);
 
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <div className="text-body">{`${baseCurrency}/${toCurrency}`}</div>
-          <div className="text-captionMd text-white/70">
+          <div className="text-captionMd text-white/70 flex gap-2">
             {/* {last ? last : 0} · MAY 14 16:00 CET */}
             {last ? (
               formatRate(last)
             ) : (
-              <Skeleton className="h-3.75 w-12.5 rounded-full" />
+              <Skeleton className="h-3.75 w-12.5 rounded-full inline-block" />
             )}{" "}
             ·{" "}
             {latestRate ? (
               `${format(new Date(latestRate.date), "MMM d")} 16:00 CET`
             ) : (
-              <Skeleton className="h-3.75 w-22.5 rounded-full" />
+              <Skeleton className="h-3.75 w-22.5 rounded-full inline-block" />
             )}
           </div>
         </CardTitle>

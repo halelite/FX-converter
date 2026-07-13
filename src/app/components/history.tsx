@@ -18,6 +18,8 @@ const History = ({ baseCurrency, toCurrency }: HistoryProps) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
+
     const fetchRates = async () => {
       setLoading(true);
 
@@ -28,13 +30,18 @@ const History = ({ baseCurrency, toCurrency }: HistoryProps) => {
           toCurrency,
         );
 
-        setRates(data);
+        if (!cancelled) {
+          setRates(data);
+        }
       } finally {
         setLoading(false);
       }
     };
-
     fetchRates();
+
+    return () => {
+      cancelled = true;
+    };
   }, [selectedRange, baseCurrency, toCurrency]);
 
   return (
@@ -44,7 +51,10 @@ const History = ({ baseCurrency, toCurrency }: HistoryProps) => {
           <div className="text-h3 text-neutral-100">
             No chart data available
           </div>
-          <div className="w-5/6 text-neutral-200 text-bodySm text-center lg:w-2/4">
+          <div
+            role="alert"
+            className="w-5/6 text-neutral-200 text-bodySm text-center lg:w-2/4"
+          >
             We couldn't load rate history for {baseCurrency}/{toCurrency} right
             now. This usually clears up in a minute.
           </div>
