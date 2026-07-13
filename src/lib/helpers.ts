@@ -1,8 +1,33 @@
-import { Currency, Rate } from "@/app/(root)/types";
-import { format, subDays, subMonths, subYears } from "date-fns";
+import {
+  CompareRate,
+  Currency,
+  PairChangeData,
+  Rate,
+} from "@/app/(root)/types";
+import {
+  differenceInCalendarDays,
+  differenceInHours,
+  differenceInMinutes,
+  format,
+  subDays,
+  subMonths,
+  subYears,
+} from "date-fns";
 import Decimal from "decimal.js";
 
 export const BASE_URL = "https://api.frankfurter.dev/v2";
+
+export const DEFAULT_QUOTES = [
+  "EUR",
+  "GBP",
+  "JPY",
+  "AED",
+  "AUD",
+  "CAD",
+  "CHF",
+  "CNY",
+  "BDT",
+];
 
 export type RangeKey = "1D" | "1W" | "1M" | "3M" | "1Y" | "5Y";
 
@@ -83,6 +108,38 @@ export async function convert(
   // return parseFloat((amount * d.rate).toFixed(2));
   // return new Decimal(amount).times(new Decimal(d.rate)).toFixed(2);
   return new Decimal(amount).times(d.rate).toDecimalPlaces(2).toString();
+}
+
+export type MultiConvert = {
+  amount: string;
+  base: string;
+  to: string;
+  quotes?: string[];
+};
+
+// multi-currency convert
+export async function getMultiCurrency({
+  amount,
+  base,
+  to,
+  quotes = DEFAULT_QUOTES,
+}: MultiConvert): Promise<CompareRate[]> {
+  const currencies = await getCurrencies();
+
+  const rates = await getExchangeRates({
+    base,
+    quotes: quotes.filter((q) => q !== base && q !== to).join(),
+  });
+
+  const compareRates = await Promise.all(
+    rates.map(async (rate: Rate) => ({
+      ...rate,
+      to_country_code: CURRENCY_TO_COUNTRY[rate.quote],
+      converted_amount: await convert(base, rate.quote, amount),
+      to_name: currencies.find((c) => c.iso_code === rate.quote)?.name ?? "",
+    })),
+  );
+  return compareRates;
 }
 
 export const CURRENCY_TO_COUNTRY: Record<string, string> = {
@@ -326,7 +383,10 @@ export async function getPairExchangeRate(
 const formatToIso = (d: Date) => format(d, "yyyy-MM-dd");
 
 // calculate absolute and percentage change of a currency
-function calculateChange(current: number, previous: number) {
+function calculateChange(
+  current: number,
+  previous: number,
+): Pick<PairChangeData, "absoluteChange" | "percentChange" | "direction"> {
   const absoluteChange = current - previous;
   const percentChange = previous === 0 ? 0 : (absoluteChange / previous) * 100;
 
@@ -336,8 +396,6 @@ function calculateChange(current: number, previous: number) {
     direction: absoluteChange > 0 ? 1 : absoluteChange < 0 ? -1 : 0,
   };
 }
-
-const DEFAULT_QUOTES = ["EUR", "GBP", "AED", "IRR", "AUD", "CAD", "CHF"];
 
 // get the last two rates of latest pairs (for ticker section)
 export async function getLatestTwoRates({
@@ -355,7 +413,7 @@ export async function getLatestTwoRates({
   const rates = await getExchangeRates({
     from: start,
     base,
-    quotes: quotes.join(),
+    quotes: quotes.filter((q) => q !== base).join(),
   });
 
   // const grouped = Object.groupBy(rates, r => r.quote);
@@ -373,9 +431,43 @@ export async function getLatestTwoRates({
   return latestPairs;
 }
 
+// get latest two rates of favorites pairs
+export async function getLatestFavoriteRates(pairs: string[]) {
+  const LOOKBACK_DAYS = 5;
+
+  const start = formatToIso(subDays(new Date(), LOOKBACK_DAYS)); // buffer for weekends/holiday
+
+  const favoritesLatestRates = await Promise.all(
+    pairs.map(async (pair: string) => {
+      const [base, quote] = pair.split("/");
+
+      // get the latest rates of a single favorite pair, sort it, and then only return the last two rates
+      const pairRecentRates = await getExchangeRates({
+        from: start,
+        base,
+        quotes: quote,
+      });
+
+      const pairRateSortedByDate = pairRecentRates.sort((a: Rate, b: Rate) =>
+        a.date.localeCompare(b.date),
+      );
+
+      const [previous, current] = pairRateSortedByDate.slice(-2);
+      return { previous, current };
+    }),
+  );
+
+  return favoritesLatestRates.filter((p) => p.previous && p.current);
+}
+
 // get pairs full data (including the absolute and percent change)
-export async function getLatestPairsChanges() {
-  const latestPairs = await getLatestTwoRates();
+export function getPairsChanges(
+  latestPairs: {
+    previous: Rate;
+    current: Rate;
+  }[],
+): PairChangeData[] {
+  // const latestPairs = await getLatestTwoRates();
 
   return latestPairs.map((p) => ({
     pair: `${p.current.base}/${p.current.quote}`,
@@ -469,3 +561,24 @@ export const formatRate = (value: number, maxDecimal = 5) =>
   new Intl.NumberFormat("en-US", { maximumFractionDigits: maxDecimal }).format(
     value,
   );
+
+export const formatTimeDistance = (date: Date) => {
+  const logDate = new Date(date);
+  const now = new Date();
+
+  const days = differenceInCalendarDays(now, logDate);
+
+  if (days >= 1) {
+    return format(logDate, "d MMM");
+  }
+
+  const hours = differenceInHours(now, logDate);
+
+  if (hours >= 1) {
+    return `${hours}H`;
+  }
+
+  const minutes = differenceInMinutes(now, logDate);
+
+  return `${Math.max(minutes, 1)}M`;
+};

@@ -15,20 +15,25 @@ import Compare from "./compare";
 import Favorites from "./favorites";
 import Logs from "./logs";
 import { useFavorites } from "../context/favoritesContext";
+import { useLogs } from "../context/logsContext";
+import { CompareRate } from "../(root)/types";
 
 type DetailsProps = {
   baseCurrency: string;
   toCurrency: string;
   amount: number;
+  compareList: CompareRate[];
 };
 
 const DetailsContainer = ({
   baseCurrency,
   toCurrency,
   amount,
+  compareList,
 }: DetailsProps) => {
   const [selectedTab, setSelectedTab] = useState("history");
   const { favorites } = useFavorites();
+  const { logs } = useLogs();
 
   const tabItems = [
     {
@@ -39,7 +44,13 @@ const DetailsContainer = ({
     {
       value: "compare",
       title: "COMPARE",
-      content: <Compare baseCurrency={baseCurrency} amount={amount} />,
+      content: (
+        <Compare
+          baseCurrency={baseCurrency}
+          amount={amount}
+          compareList={compareList}
+        />
+      ),
     },
     {
       value: "favorites",
@@ -51,7 +62,7 @@ const DetailsContainer = ({
           </div>
         </div>
       ),
-      content: <Favorites favorites={favorites} />,
+      content: <Favorites favoritePairs={favorites} />,
     },
     {
       value: "log",
@@ -59,11 +70,11 @@ const DetailsContainer = ({
         <div className="me-6 w-full flex items-center justify-between gap-2 sm:me-0">
           <span>LOG</span>
           <div className="size-5 flex items-center justify-center rounded-full text-captionSm text-lime-500 bg-lime-800 pt-0.5">
-            {favorites.length}
+            {logs.length}
           </div>
         </div>
       ),
-      content: <Logs />,
+      content: <Logs logs={logs} />,
     },
   ];
 
