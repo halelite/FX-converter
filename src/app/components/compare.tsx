@@ -80,7 +80,7 @@ const Compare = ({ baseCurrency, amount, compareList }: CompareProps) => {
                 <div className="flex flex-col items-end gap-1.5">
                   <div className="text-bodyMd">{item.converted_amount}</div>
 
-                  <div className="text-captionSm text-neutral-200">
+                  <div className="text-captionSm text-neutral-200 text-nowrap">
                     @ 0.7366
                   </div>
                 </div>

@@ -41,8 +41,8 @@ const Logs = ({ logs }: LogsProps) => {
                 key={item.id}
                 className="flex items-center justify-between gap-4 border border-neutral-500 bg-neutral-600 rounded-10 py-3 sm:py-4 px-3 sm:px-4"
               >
-                <div className="flex items-center gap-4 text-bodySm">
-                  <span className="min-w-16 text-neutral-200">
+                <div className="flex flex-col sm:items-center gap-1 sm:gap-4 text-bodySm">
+                  <span className="sm:min-w-16 text-neutral-200">
                     {formatTimeDistance(item.time)}
                   </span>
 
