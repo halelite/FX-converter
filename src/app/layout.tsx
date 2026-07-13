@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import CombineProviders from "./providers/combineProviders";
 
 const jetbrainsMonoHeading = JetBrains_Mono({
   subsets: ["latin"],
@@ -50,7 +51,9 @@ export default function RootLayout({
         jetbrainsMonoHeading.variable,
       )}
     >
-      <body className="h-full flex flex-col">{children}</body>
+      <body className="h-full flex flex-col">
+        <CombineProviders>{children}</CombineProviders>
+      </body>
     </html>
   );
 }
