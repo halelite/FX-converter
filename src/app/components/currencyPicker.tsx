@@ -69,11 +69,10 @@ export const CurrencyPicker = ({
         render={
           <Button
             variant="outline"
-            className="justify-between text-bodySm! p-2.5! bg-neutral-500! h-10!"
+            className="justify-between text-bodySm! text-forground bg-neutral-500! hover:bg-neutral-400! p-2.5! h-10!"
           >
             <ComboboxValue placeholder="select a currency">
               {(selectedCurrency) => {
-                console.log("selected", selectedCurrency?.iso_code);
                 if (!selectedCurrency) return "select a currency";
                 return (
                   <div className="flex items-center gap-2">

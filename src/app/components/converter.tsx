@@ -15,6 +15,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Decimal from "decimal.js";
 import { ExchangeOutlined } from "@/assets/icons/exchange-outlined";
 import { useFavorites } from "../context/favoritesContext";
+import { useLogs } from "../context/logsContext";
+import { toast } from "sonner";
 
 type CurrencyProps = {
   initialAmount: number;
@@ -48,11 +50,23 @@ const CurrencyConverter = ({
   const [activePairRateLoading, setActivePairRateLoading] = useState(false);
   const { favorites, toggleFavorite } = useFavorites();
   const isFavorited = favorites?.includes(`${sendCurrency}/${receiveCurrency}`);
+  const { addLog } = useLogs();
 
   const handleSwapCurrencies = () => {
     const receiveTemp = sendCurrency;
     setSendCurrency(receiveCurrency);
     setReceiveCurrency(receiveTemp);
+  };
+
+  const handleLogConversion = () => {
+    addLog({
+      time: new Date(),
+      pair: `${sendCurrency}/${receiveCurrency}`,
+      sendAmount: sendValue,
+      receiveAmount: receiveValue,
+    });
+
+    toast.success("Logged conversion successfully");
   };
 
   // convert currencies on currency change
@@ -153,7 +167,8 @@ const CurrencyConverter = ({
           </div>
 
           <div
-            className="self-center size-12 flex items-center justify-center bg-neutral-600 border border-neutral-500 rounded-lg shrink-0 cursor-pointer"
+            className="self-center size-12 flex items-center justify-center bg-neutral-600 border hover:bg-neutral-500 border-neutral-500 focus-visible:ring focus-visible:ring-lime-500! rounded-lg shrink-0 cursor-pointer"
+            tabIndex={0}
             onClick={loading ? () => {} : handleSwapCurrencies}
           >
             {loading ? (
@@ -218,21 +233,23 @@ const CurrencyConverter = ({
               onPressedChange={() =>
                 toggleFavorite(`${sendCurrency}/${receiveCurrency}`)
               }
-              className="uppercase data-[state=on]:bg-lime-500! data-[state=on]:text-neutral-900!"
+              className="uppercase text-foreground! data-[state=on]:bg-lime-500! data-[state=on]:text-neutral-900! hover:opacity-80"
             >
               <StarFilled
                 pressed={isFavorited}
-                className={cn(
-                  "text-neutral-200 group-hover/toggle:text-white",
-                  {
-                    "text-neutral-900": isFavorited,
-                  },
-                )}
+                className={cn("text-foreground", {
+                  "text-neutral-900": isFavorited,
+                })}
               />
               {isFavorited ? "Favorited" : "Favorite"}
             </Toggle>
 
-            <Button variant="outline" className="uppercase bg-transparent!">
+            <Button
+              variant="outline"
+              className="uppercase text-foreground! bg-transparent! border-lime-500! hover:bg-lime-800! disabled:border-neutral-200!"
+              disabled={!sendValue || sendValue === "0" || loading}
+              onClick={handleLogConversion}
+            >
               Log conversion
             </Button>
           </div>
