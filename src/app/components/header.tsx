@@ -7,7 +7,7 @@ const Header = async () => {
   const currenciesCount = currencies?.length || 0;
 
   return (
-    <header className="flex items-center justify-between px-6 py-5">
+    <header className="flex items-center justify-between p-4 sm:px-6 sm:py-5">
       <Image src={logo} alt="logo" className="h-5 w-auto sm:h-auto" />
 
       <div className="text-captionSm sm:text-bodySm text-neutral-200">
