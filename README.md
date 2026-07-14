@@ -7,7 +7,8 @@ This is a solution to the [FX Checker challenge on Frontend Mentor](https://www.
 - [Overview](#overview)
   - [The challenge](#the-challenge)
   - [Features](#features)
-  - [Screenshot](#screenshot)
+  - [Architecture](#architecture)
+  <!-- - [Screenshot](#screenshot) -->
   - [Links](#links)
 - [Setup Project Locally](#setup-project-locally)
 - [My process](#my-process)
@@ -121,6 +122,15 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 - [date-fns](https://motion.dev/) - Modern utility library for date manipulation and formatting
 - [decimal.js](https://mikemcl.github.io/decimal.js/) - Arbitrary-precision decimal arithmetic for accurate currency calculations
 
+### Architecture
+
+The application is organized around a small set of reusable utilities and React Context providers.
+
+- **`useLocalStorage`** abstracts browser storage into a reusable hook, allowing state to persist across page reloads without duplicating storage logic.
+- **FavoritesContext** manages pinned currency pairs and exposes simple add, remove, and toggle actions throughout the application.
+- **LogsContext** stores conversion history and provides actions for creating, deleting, and clearing log entries.
+- **Combined Providers** compose the application's global state into a single provider wrapper, keeping the root layout clean.
+
 ### What I learned
 
 Working on this project helped me gain a deeper understanding of:
@@ -129,7 +139,8 @@ Working on this project helped me gain a deeper understanding of:
 - Building reusable React components with clear responsibilities.
 - Managing asynchronous data fetching and loading states.
 - Working with historical exchange rate data and calculating rate changes over different time ranges.
-- Using URL search parameters to create clean and flexible API requests.
+- Synchronizing application state with URL search parameters for shareable links.
+- Building responsive charts with Recharts and dynamically adjusting chart scales.
 - Improving accessibility through keyboard navigation and semantic UI components.
 
 ### Continued development
