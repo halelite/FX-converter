@@ -69,7 +69,7 @@ export const CurrencyPicker = ({
         render={
           <Button
             variant="outline"
-            className="justify-between text-bodySm! text-forground bg-neutral-500! hover:bg-neutral-400! p-2.5! h-10!"
+            className="justify-between text-bodySm! text-forground bg-neutral-50 hover:bg-input dark:bg-neutral-500! dark:hover:bg-neutral-400! p-2.5! h-10!"
           >
             <ComboboxValue placeholder="select a currency">
               {(selectedCurrency) => {

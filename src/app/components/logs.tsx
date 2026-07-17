@@ -74,8 +74,10 @@ const Logs = ({ logs }: LogsProps) => {
     </Card>
   ) : (
     <div className="flex flex-col items-center justify-center gap-4 py-10">
-      <div className="text-h3 text-neutral-100">No conversions logged yet</div>
-      <div className="w-5/6 text-neutral-200 text-bodySm text-center lg:w-4/6">
+      <div className="text-h3 dark:text-neutral-100">
+        No conversions logged yet
+      </div>
+      <div className="w-5/6 text-neutral-500 dark:text-neutral-200 text-bodySm text-center lg:w-4/6">
         Every conversion is recorded here automatically when you tap LOG
         CONVERSION. Your log is private to this session and this browser.
       </div>

@@ -138,8 +138,10 @@ const Favorites = ({ favoritePairs }: FavoritesProps) => {
     </Card>
   ) : (
     <div className="flex flex-col items-center justify-center gap-4 py-10">
-      <div className="text-h3 text-neutral-100">No pinned pairs yet</div>
-      <div className="w-5/6 text-neutral-200 text-bodySm text-center lg:w-2/4">
+      <div className="text-h3 text-neutral-700 dark:text-neutral-100">
+        No pinned pairs yet
+      </div>
+      <div className="w-5/6 text-neutral-500 dark:text-neutral-200 text-bodySm text-center lg:w-2/4">
         Pin a pair to track its rate here. Tap the star icon on any conversion
         or comparison row.
       </div>

@@ -136,10 +136,10 @@ const CurrencyConverter = ({
   return (
     <div>
       <div className="text-h3 mb-4">CHECK THE RATE</div>
-      <div className="bg-neutral-700 rounded-lg">
+      <div className="bg-neutral-50 dark:bg-neutral-700 rounded-lg shadow-sm dark:shadow-none">
         <div className="flex flex-col items-stretch sm:flex-row sm:items-center gap-6 p-4 overflow-x-hidden">
           <div
-            className="flex-1 min-w-0 bg-neutral-600 border border-neutral-500 p-4 rounded-lg"
+            className="flex-1 min-w-0 bg-neutral-100 dark:bg-neutral-600 border border-neutral-200 dark:border-neutral-500 p-4 rounded-lg"
             ref={sendRef}
           >
             <div className="text-bodySm mb-5">SEND</div>
@@ -167,7 +167,7 @@ const CurrencyConverter = ({
           </div>
 
           <Button
-            className="self-center size-12 bg-neutral-600! border hover:bg-neutral-500! border-neutral-500 focus-visible:ring focus-visible:ring-lime-500! rounded-lg shrink-0 text-foreground!"
+            className="self-center size-12 bg-neutral-100 dark:bg-neutral-600! hover:bg-input dark:hover:bg-neutral-500! border border-neutral-200 dark:border-neutral-500 focus-visible:ring focus-visible:ring-lime-500! rounded-lg shrink-0 text-foreground!"
             tabIndex={0}
             onClick={loading ? () => {} : handleSwapCurrencies}
           >
@@ -179,7 +179,7 @@ const CurrencyConverter = ({
           </Button>
 
           <div
-            className="flex-1 min-w-0 bg-neutral-600 border border-neutral-500 p-4 rounded-lg"
+            className="flex-1 min-w-0 bg-neutral-100 dark:bg-neutral-600 border border-neutral-200 dark:border-neutral-500 p-4 rounded-lg"
             ref={receiveRef}
           >
             <div className="text-bodySm mb-5">RECEIVE</div>
@@ -191,7 +191,7 @@ const CurrencyConverter = ({
                   setDirection("receive");
                   setReceiveValue(val === "" ? "0" : (val ?? "0"));
                 }}
-                className="text-h2! lg:text-h1! text-lime-500"
+                className="text-h2! lg:text-h1! text-lime-600 dark:text-lime-500"
               />
 
               <CurrencyPicker
@@ -244,7 +244,7 @@ const CurrencyConverter = ({
 
             <Button
               variant="outline"
-              className="uppercase text-foreground! bg-transparent! border-lime-500! hover:bg-lime-800! disabled:border-neutral-200!"
+              className="uppercase text-foreground! bg-transparent! border-lime-600 dark:border-lime-500! hover:bg-lime-200! dark:hover:bg-lime-800! disabled:border-neutral-200!"
               disabled={!sendValue || sendValue === "0" || loading}
               onClick={handleLogConversion}
             >

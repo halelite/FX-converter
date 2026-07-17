@@ -60,7 +60,7 @@ const RateAreaChart = ({
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <div className="text-body">{`${baseCurrency}/${toCurrency}`}</div>
-          <div className="text-captionMd text-white/70 flex gap-2">
+          <div className="text-captionMd text-forground opacity-70 flex gap-2">
             {/* {last ? last : 0} · MAY 14 16:00 CET */}
             {last ? (
               formatRate(last)

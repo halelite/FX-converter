@@ -57,7 +57,7 @@ const DetailsContainer = ({
       title: (
         <div className="me-6 w-full flex items-center justify-between gap-2 sm:me-0">
           <span>FAVORITES</span>
-          <div className="size-5 flex items-center justify-center rounded-full text-captionSm text-lime-500 bg-lime-800 pt-0.5">
+          <div className="size-5 flex items-center justify-center rounded-full text-captionSm text-lime-800 dark:text-lime-500 bg-lime-500 dark:bg-lime-800 pt-0.5">
             {favorites.length}
           </div>
         </div>
@@ -69,7 +69,7 @@ const DetailsContainer = ({
       title: (
         <div className="me-6 w-full flex items-center justify-between gap-2 sm:me-0">
           <span>LOG</span>
-          <div className="size-5 flex items-center justify-center rounded-full text-captionSm text-lime-500 bg-lime-800 pt-0.5">
+          <div className="size-5 flex items-center justify-center rounded-full text-captionSm text-lime-800 dark:text-lime-500 bg-lime-500 dark:bg-lime-800 pt-0.5">
             {logs.length}
           </div>
         </div>
@@ -80,7 +80,7 @@ const DetailsContainer = ({
 
   return (
     <Tabs value={selectedTab} onValueChange={setSelectedTab}>
-      <div className="hidden sm:block border-b border-b-neutral-600">
+      <div className="hidden sm:block border-b border-b-neutral-200 dark:border-b-neutral-600">
         <TabsList variant="line">
           {tabItems.map((item) => (
             <TabsTrigger key={item.value} value={item.value}>

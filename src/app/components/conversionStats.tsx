@@ -70,7 +70,7 @@ const ConversionStats = ({ rates, loading }: ConversionStatsProps) => {
       {statsItems.map((item) => (
         <div
           key={`${item.title}`}
-          className="bg-card border border-neutral-600 px-5 py-3 rounded-2xl"
+          className="bg-card border border-neutral-200 dark:border-neutral-600 px-5 py-3 rounded-2xl"
         >
           <div className="text-bodySm opacity-70 mb-4">{item.title}</div>
           {loading ? (

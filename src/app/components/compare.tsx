@@ -29,8 +29,10 @@ const Compare = ({ baseCurrency, amount, compareList }: CompareProps) => {
 
   return amount === 0 ? (
     <div className="flex flex-col items-center justify-center gap-4 py-10">
-      <div className="text-h3 text-neutral-100">No comparison available</div>
-      <div className="w-3/4 text-neutral-200 text-bodySm text-center lg:w-2/4">
+      <div className="text-h3 text-neutral-700 dark:text-neutral-100">
+        No comparison available
+      </div>
+      <div className="w-3/4 text-neutral-500 dark:text-neutral-200 text-bodySm text-center lg:w-2/4">
         Enter an amount in SEND above to see what your money is worth in other
         currencies.
       </div>
@@ -58,7 +60,7 @@ const Compare = ({ baseCurrency, amount, compareList }: CompareProps) => {
           return (
             <div
               key={item.quote}
-              className="flex items-center justify-between gap-2.5 sm:gap-5 border border-neutral-500 bg-neutral-600 rounded-10 py-3 px-3 sm:px-4"
+              className="flex items-center justify-between gap-2.5 sm:gap-5 border border-muted-foreground dark:border-neutral-500 dark:bg-neutral-600 rounded-10 py-3 px-3 sm:px-4 shadow-sm"
             >
               <div className="flex items-center gap-2.5 sm:gap-5">
                 <CircleFlag

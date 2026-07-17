@@ -52,9 +52,11 @@ export const Ticker = ({ items }: any) => {
       {tickerItems.map((item, index) => (
         <div
           key={index}
-          className="flex items-center gap-2.5 p-3 border-e border-neutral-500 whitespace-nowrap"
+          className="flex items-center gap-2.5 p-3 border-e border-e-neutral-300 dark:border-neutral-500 whitespace-nowrap"
         >
-          <div className="text-neutral-200 text-captionMd">{item.pair}</div>
+          <div className="text-neutral-300 dark:text-neutral-200 text-captionMd">
+            {item.pair}
+          </div>
           <div className="text-caption">{formatRate(item.rate, 4)}</div>
 
           <div
@@ -63,7 +65,7 @@ export const Ticker = ({ items }: any) => {
                 ? "text-green-500"
                 : item.direction === -1
                   ? "text-red-500"
-                  : "text-neutral-100"
+                  : "text-neutral-200 dark:text-neutral-100"
             }`}
           >
             <div>

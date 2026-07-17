@@ -50,6 +50,7 @@ export default function RootLayout({
         inter.variable,
         jetbrainsMonoHeading.variable,
       )}
+      suppressHydrationWarning
     >
       <body className="h-full flex flex-col">
         <CombineProviders>{children}</CombineProviders>

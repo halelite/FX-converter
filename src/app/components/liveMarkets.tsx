@@ -18,7 +18,7 @@ const LiveMarkets = async () => {
         </div>
       </div>
 
-      <div className="flex overflow-x-hidden bg-neutral-700">
+      <div className="flex overflow-x-hidden bg-white dark:bg-neutral-700">
         <Ticker items={rates} />
       </div>
     </div>
